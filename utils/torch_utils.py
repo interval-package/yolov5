@@ -366,10 +366,12 @@ def smart_optimizer(model, name="Adam", lr=0.001, momentum=0.9, decay=1e-5):
                 g[0].append(p)  # weight (with decay)
 
     import rad.optim
+    # max_iter = 300*round(925/128)
+    max_iter = 300*925
 
     if name == "Adam":
         optimizer = torch.optim.Adam(g[2], lr=lr, betas=(momentum, 0.999))  # adjust beta1 to momentum
-    if name == "AdamRad":
+    elif name == "AdamRad":
         optimizer = rad.optim.Adam(g[2], lr=lr, betas=(momentum, 0.999))  # adjust beta1 to momentum
     elif name == "AdamW":
         optimizer = torch.optim.AdamW(g[2], lr=lr, betas=(momentum, 0.999), weight_decay=0.0)
@@ -382,7 +384,7 @@ def smart_optimizer(model, name="Adam", lr=0.001, momentum=0.9, decay=1e-5):
     elif name == "SGDRad":
         optimizer = rad.optim.SGD(g[2], lr=lr, momentum=momentum)
     elif name == "RAD":
-        optimizer = rad.optim.RAD(g[2], lr=lr, betas=(momentum, 0.999))
+        optimizer = rad.optim.RAD(g[2], lr=lr, betas=(momentum, 0.999), max_iter=max_iter)
     else:
         raise NotImplementedError(f"Optimizer {name} not implemented.")
 
